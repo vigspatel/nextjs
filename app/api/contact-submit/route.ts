@@ -105,33 +105,15 @@ export async function POST(req: Request) {
       // include HTTP status for debugging
 
       return NextResponse.json({ ok: success, status: cf7Status });
-    }
-
-    if (!cf7ApiResponse.ok) {
-      return NextResponse.json(
-        {
-          ok: false,
-          status: "failed",
-          response: await cf7ApiResponse.text(),
-        },
-        { status: cf7ApiResponse.status },
-      );
     } else {
-      cf7Response = await cf7ApiResponse.text();
+      cf7Response = responseText;
       success = validateCF7Response(cf7Response);
       cf7Status = success ? "mail_sent" : "submission_failed";
-      // include HTTP status for debugging
-      /* addLog({
-        name: body["your-name"],
-        email: body["your-email"],
-        subject: body["your-subject"] || "No subject",
-        message: body["your-message"] || "No message",
-        cf7Status,
-        cf7Response: cf7Response.substring(0, 500),
-        cf7HttpStatus: cf7ApiResponse.status,
-        success,
-      }); */
-      return NextResponse.json({ ok: success, status: cf7Status });
+
+      return NextResponse.json({
+        ok: success,
+        status: cf7Status,
+      });
     }
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
