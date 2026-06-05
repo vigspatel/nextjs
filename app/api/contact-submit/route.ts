@@ -43,10 +43,19 @@ export async function POST(req: Request) {
     // CF7 will route it to the correct form via `wpcf7` + field names.
     const formData = new FormData();
 
+    // Required CF7 hidden fields
+    formData.append("_wpcf7", "75");
+    formData.append("_wpcf7_version", "6.1.6");
+    formData.append("_wpcf7_locale", "en_US");
+    formData.append("_wpcf7_unit_tag", "wpcf7-f75-p78-o1");
+    formData.append("_wpcf7_container_post", "78");
+
+    // Form fields
     formData.append("your-name", body["your-name"] || "");
     formData.append("your-email", body["your-email"] || "");
     formData.append("your-subject", body["your-subject"] || "");
     formData.append("your-message", body["your-message"] || "");
+
     const cf7ApiResponse = await fetch(
       `${wpBase}/wp-json/contact-form-7/v1/contact-forms/75/feedback`,
       {
@@ -55,8 +64,11 @@ export async function POST(req: Request) {
         cache: "no-store",
       },
     );
-    console.log("CF7 API status:", cf7ApiResponse.status);
-    console.log("CF7 API response:", await cf7ApiResponse.clone().text());
+
+    const responseText = await cf7ApiResponse.text();
+
+    console.log("CF7 Status:", cf7ApiResponse.status);
+    console.log("CF7 Response:", responseText);
     /* if (!cf7ApiResponse.ok) {
       // Fallback to classic endpoint
       const fallback = await fetch(`${wpBase}/wp-admin/admin-ajax.php`, {
