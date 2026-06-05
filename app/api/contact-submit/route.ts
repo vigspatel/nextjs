@@ -41,26 +41,23 @@ export async function POST(req: Request) {
 
     // Most CF7 setups accept form-encoded POST to this endpoint.
     // CF7 will route it to the correct form via `wpcf7` + field names.
-    const formData = new URLSearchParams();
-    formData.set("wpcf7", "01e2b9c");
-    formData.set("your-name", body["your-name"] || "");
-    formData.set("your-email", body["your-email"] || "");
-    if (body["your-subject"])
-      formData.set("your-subject", body["your-subject"]);
-    if (body["your-message"])
-      formData.set("your-message", body["your-message"]);
+    const formData = new FormData();
 
-    const cf7ApiResponse = await fetch(`${wpBase}/wp-json/cf7/v1/submit`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+    formData.append("your-name", body["your-name"] || "");
+    formData.append("your-email", body["your-email"] || "");
+    formData.append("your-subject", body["your-subject"] || "");
+    formData.append("your-message", body["your-message"] || "");
+    const cf7ApiResponse = await fetch(
+      `${wpBase}/wp-json/contact-form-7/v1/contact-forms/75/feedback`,
+      {
+        method: "POST",
+        body: formData,
+        cache: "no-store",
       },
-      body: formData.toString(),
-      cache: "no-store",
-    });
+    );
     console.log("CF7 API status:", cf7ApiResponse.status);
     console.log("CF7 API response:", await cf7ApiResponse.clone().text());
-    if (!cf7ApiResponse.ok) {
+    /* if (!cf7ApiResponse.ok) {
       // Fallback to classic endpoint
       const fallback = await fetch(`${wpBase}/wp-admin/admin-ajax.php`, {
         method: "POST",
@@ -87,7 +84,7 @@ export async function POST(req: Request) {
       cf7Status = fallback.ok ? "success" : "failed";
       success = fallback.ok;
       // include HTTP status for debugging
-      /* addLog({
+      addLog({
         name: body["your-name"],
         email: body["your-email"],
         subject: body["your-subject"] || "No subject",
@@ -96,8 +93,19 @@ export async function POST(req: Request) {
         cf7Response: cf7Response.substring(0, 500),
         cf7HttpStatus: fallback.status,
         success,
-      }); */
+      });
       return NextResponse.json({ ok: success, status: cf7Status });
+    } */
+
+    if (!cf7ApiResponse.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          status: "failed",
+          response: await cf7ApiResponse.text(),
+        },
+        { status: cf7ApiResponse.status },
+      );
     } else {
       cf7Response = await cf7ApiResponse.text();
       success = validateCF7Response(cf7Response);
