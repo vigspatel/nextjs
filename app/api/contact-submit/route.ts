@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       cf7Status = fallback.ok ? "success" : "failed";
       success = fallback.ok;
       // include HTTP status for debugging
-      addLog({
+      /* addLog({
         name: body["your-name"],
         email: body["your-email"],
         subject: body["your-subject"] || "No subject",
@@ -95,14 +95,14 @@ export async function POST(req: Request) {
         cf7Response: cf7Response.substring(0, 500),
         cf7HttpStatus: fallback.status,
         success,
-      });
+      }); */
       return NextResponse.json({ ok: success, status: cf7Status });
     } else {
       cf7Response = await cf7ApiResponse.text();
       success = validateCF7Response(cf7Response);
       cf7Status = success ? "mail_sent" : "submission_failed";
       // include HTTP status for debugging
-      addLog({
+      /* addLog({
         name: body["your-name"],
         email: body["your-email"],
         subject: body["your-subject"] || "No subject",
@@ -111,14 +111,14 @@ export async function POST(req: Request) {
         cf7Response: cf7Response.substring(0, 500),
         cf7HttpStatus: cf7ApiResponse.status,
         success,
-      });
+      }); */
       return NextResponse.json({ ok: success, status: cf7Status });
     }
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
 
     // Log the error
-    addLog({
+    /* addLog({
       name: "Unknown",
       email: "Unknown",
       subject: "Error",
@@ -127,7 +127,7 @@ export async function POST(req: Request) {
       cf7Response: message,
       success: false,
       error: message,
-    });
+    }); */
 
     return NextResponse.json(
       { ok: false, status: "error", error: message },
