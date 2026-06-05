@@ -69,7 +69,10 @@ export async function POST(req: Request) {
 
     console.log("CF7 Status:", cf7ApiResponse.status);
     console.log("CF7 Response:", responseText);
-    /* if (!cf7ApiResponse.ok) {
+
+    cf7Response = responseText;
+
+    if (!cf7ApiResponse.ok) {
       // Fallback to classic endpoint
       const fallback = await fetch(`${wpBase}/wp-admin/admin-ajax.php`, {
         method: "POST",
@@ -91,23 +94,18 @@ export async function POST(req: Request) {
         cache: "no-store",
       });
       console.log("Fallback status:", fallback.status);
-      console.log("Fallback response:", await fallback.clone().text());
-      cf7Response = await fallback.text();
+      const fallbackResponse = await fallback.text();
+
+      console.log("Fallback status:", fallback.status);
+      console.log("Fallback response:", fallbackResponse);
+
+      cf7Response = fallbackResponse;
       cf7Status = fallback.ok ? "success" : "failed";
       success = fallback.ok;
       // include HTTP status for debugging
-      addLog({
-        name: body["your-name"],
-        email: body["your-email"],
-        subject: body["your-subject"] || "No subject",
-        message: body["your-message"] || "No message",
-        cf7Status,
-        cf7Response: cf7Response.substring(0, 500),
-        cf7HttpStatus: fallback.status,
-        success,
-      });
+
       return NextResponse.json({ ok: success, status: cf7Status });
-    } */
+    }
 
     if (!cf7ApiResponse.ok) {
       return NextResponse.json(
