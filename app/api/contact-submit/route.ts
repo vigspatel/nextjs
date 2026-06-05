@@ -58,7 +58,8 @@ export async function POST(req: Request) {
       body: formData.toString(),
       cache: "no-store",
     });
-
+    console.log("CF7 API status:", cf7ApiResponse.status);
+    console.log("CF7 API response:", await cf7ApiResponse.clone().text());
     if (!cf7ApiResponse.ok) {
       // Fallback to classic endpoint
       const fallback = await fetch(`${wpBase}/wp-admin/admin-ajax.php`, {
