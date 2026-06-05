@@ -1,4 +1,3 @@
-import { addLog } from "@/lib/logger";
 import { NextResponse } from "next/server";
 
 type SubmitBody = {
@@ -81,7 +80,8 @@ export async function POST(req: Request) {
         }).toString(),
         cache: "no-store",
       });
-
+      console.log("Fallback status:", fallback.status);
+      console.log("Fallback response:", await fallback.clone().text());
       cf7Response = await fallback.text();
       cf7Status = fallback.ok ? "success" : "failed";
       success = fallback.ok;
