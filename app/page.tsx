@@ -576,7 +576,7 @@ export default async function Home() {
                 type="submit"
                 className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Send Message123
+                Send Message
               </button>
             </form>
           </div>

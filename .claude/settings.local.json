@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST \"https://bluereeftech.com/demo-next-js/graphql\" -H \"Content-Type: application/json\" -d '{\"query\":\"query{pages\\(where:{name:\\\\\"about\\\\\"}\\){nodes{title aboutSection{aboutTitle pdfEmbedder videoEmbedder docEmbedder}}}}\"}')",
+      "Bash(curl -s -X POST \"https://bluereeftech.com/demo-next-js/graphql\" -H \"Content-Type: application/json\" -d '{\"query\":\"query{pages{nodes{title slug status}}}\"}')",
+      "Bash(curl -s -X POST \"https://bluereeftech.com/demo-next-js/graphql\" -H \"Content-Type: application/json\" -d '{\"query\":\"query{pages{nodes{slug aboutSection{aboutTitle pdfEmbedder videoEmbedder docEmbedder}}}}\"}')",
+      "Bash(npm run *)",
+      "Bash(curl -s \"http://localhost:3001/about\")"
+    ]
+  }
+}

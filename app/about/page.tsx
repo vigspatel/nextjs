@@ -68,7 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const data = await gqlClient.request<{ pages: { nodes: Page[] } }>(
       GET_PAGE_BY_SLUG,
       {
-        slug: "about",
+        slug: "home",
       },
     );
 
@@ -105,7 +105,7 @@ export default async function AboutPage() {
   try {
     const { data }: any = await client.query({
       query: ABOUT_QUERY,
-      variables: { slug: "about" },
+      variables: { slug: "home" },
       errorPolicy: "all",
       fetchPolicy: "no-cache",
     });
@@ -116,10 +116,25 @@ export default async function AboutPage() {
   }
 
   const about = page?.aboutSection;
-  console.log("ABOUT DATA:", about);
   return (
     <>
       <JsonLdScript yoastSeo={yoastData} />
+
+      {/* TEMP DEBUG — remove once embeds are confirmed working */}
+      {/* <pre className="bg-black text-green-400 text-xs p-4 overflow-auto whitespace-pre-wrap">
+        {JSON.stringify(
+          {
+            pageFound: Boolean(page),
+            pageTitle: page?.title ?? null,
+            hasAboutSection: Boolean(about),
+            pdfEmbedder: about?.pdfEmbedder ?? null,
+            videoEmbedder: about?.videoEmbedder ?? null,
+            docEmbedder: about?.docEmbedder ?? null,
+          },
+          null,
+          2,
+        )}
+      </pre> */}
 
       {/* Hero Section */}
       <div className="bg-indigo-900 pt-32 pb-16 text-center text-white relative overflow-hidden">
