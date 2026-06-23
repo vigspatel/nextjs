@@ -13,7 +13,7 @@ export default function Navbar() {
           MyBrand
         </Link>
         <div className="hidden md:flex gap-8 text-sm font-medium">
-          {["About", "Services", "Portfolio", "Testimonials", "Contact"].map(
+          {["About", "Services", "Portfolio", "Events", "Testimonials", "Contact"].map(
             (item) => {
               const route = `/${item.toLowerCase()}`;
               const isActive = pathname === route || pathname.startsWith(route + "/");

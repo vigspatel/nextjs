@@ -3,14 +3,16 @@ import { getYoastSchema } from '@/lib/seo'
 
 interface JsonLdScriptProps {
   yoastSeo?: YoastSEO
+  /** A ready-made JSON-LD object (used when there is no Yoast data, e.g. events) */
+  schema?: unknown
 }
 
 /**
- * Component to render Yoast SEO schema (JSON-LD) in page head
- * Should be used in your page or layout to inject structured data
+ * Component to render JSON-LD structured data in the page.
+ * Pass `yoastSeo` to render Yoast's schema, or `schema` for a custom object.
  */
-export function JsonLdScript({ yoastSeo }: JsonLdScriptProps) {
-  const schema = getYoastSchema(yoastSeo)
+export function JsonLdScript({ yoastSeo, schema: rawSchema }: JsonLdScriptProps) {
+  const schema = rawSchema ?? getYoastSchema(yoastSeo)
 
   if (!schema) {
     return null
